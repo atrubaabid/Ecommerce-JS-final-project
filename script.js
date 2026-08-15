@@ -125,6 +125,75 @@ let productContainer = document.querySelector(".products-cards");
 let productTemplate = document.querySelector(".productTemplate")
 
 
+// INCREMENT & DECREAMENT TOGGLE
+let ProductQuantityToggle = (event, id, stock) => {
+    let selectedCard = document.querySelector(`#card${id}`);
+    let quantityP = selectedCard.querySelector(".product-piece");
+    let quantity = Number(quantityP.innerHTML);
+
+    if (event.target.className == "increment") {
+        if (quantity < stock) {
+            quantity += 1;
+        } else if (quantity == stock) {
+            quantity = stock;
+        }
+    } else if (event.target.className == "decrement") {
+        if (quantity > 1) {
+            quantity -= 1;
+        }
+    }
+    quantityP.innerHTML = quantity
+}
+
+// GET-LS-DATA
+let getLSData = () => {
+    let getLSCardsdata = localStorage.getItem("addtocartsData");
+    if (!getLSCardsdata) {
+        return [];
+    }
+    getLSCardsdata = JSON.parse(getLSCardsdata);
+    return getLSCardsdata;
+}
+
+
+// UPDATE CART VALUE
+
+let updatecartValue = (data) => {
+    
+    let CartValue = document.querySelector("#cart");
+    return CartValue.innerHTML = data.length;
+}
+
+
+// ADD TO CART
+
+let addToCart = (event, id) => {
+
+    let localStoragedata = getLSData();
+    
+
+    let selectedCard = document.querySelector(`#card${id}`);
+    let price = selectedCard.querySelector(".original-price").innerHTML;
+    let quantity = selectedCard.querySelector(".product-piece").innerHTML;
+
+    price = price.replace("Rs ", "");
+    price = Number(price);
+    quantity = Number(quantity);
+    price = price * quantity;
+
+    localStoragedata.push({ id, price, quantity });
+
+    localStorage.setItem("addtocartsData", JSON.stringify(localStoragedata));
+
+    updatecartValue(localStoragedata);
+
+
+}
+
+
+
+
+// SHOW PRODUCTS
 let showProductContainer = (products) => {
 
     if (!products) {
@@ -139,6 +208,7 @@ let showProductContainer = (products) => {
         let productClone = document.importNode(productTemplate.content, true);
 
 
+        productClone.querySelector("#cardValue").setAttribute("id", `card${id}`)
         productClone.querySelector(".category").textContent = category;
         productClone.querySelector(".p-name").textContent = name;
         productClone.querySelector(".product-img").src = image;
@@ -148,6 +218,16 @@ let showProductContainer = (products) => {
         productClone.querySelector(".productfake-price").textContent = `Rs ${price * 4}`;
         productClone.querySelector(".p-stock").textContent = stock;
 
+        productClone.querySelector(".Quantity").addEventListener("click", (event) => {
+            ProductQuantityToggle(event, id, stock)
+        })
+
+        productClone.querySelector(".AddtoCart").addEventListener("click", (event) => {
+            addToCart(event, id)
+        })
+
+
+
 
 
         productContainer.append(productClone);
@@ -156,3 +236,5 @@ let showProductContainer = (products) => {
 }
 
 showProductContainer(products)
+
+
