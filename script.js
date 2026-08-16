@@ -145,6 +145,17 @@ let ProductQuantityToggle = (event, id, stock) => {
     quantityP.innerHTML = quantity
 }
 
+
+
+
+// UPDATE CART VALUE
+
+let updatecartValue = (data) => {
+    let CartValue = document.querySelector("#cart");
+    return CartValue.innerHTML = data.length;
+}
+
+
 // GET-LS-DATA
 let getLSData = () => {
     let getLSCardsdata = localStorage.getItem("addtocartsData");
@@ -152,17 +163,18 @@ let getLSData = () => {
         return [];
     }
     getLSCardsdata = JSON.parse(getLSCardsdata);
+
+    // update cart value
+    updatecartValue(getLSCardsdata)
+
     return getLSCardsdata;
 }
 
+getLSData()
 
-// UPDATE CART VALUE
 
-let updatecartValue = (data) => {
-    
-    let CartValue = document.querySelector("#cart");
-    return CartValue.innerHTML = data.length;
-}
+
+
 
 
 // ADD TO CART
@@ -170,22 +182,44 @@ let updatecartValue = (data) => {
 let addToCart = (event, id) => {
 
     let localStoragedata = getLSData();
-    
+
 
     let selectedCard = document.querySelector(`#card${id}`);
     let price = selectedCard.querySelector(".original-price").innerHTML;
     let quantity = selectedCard.querySelector(".product-piece").innerHTML;
 
     price = price.replace("Rs ", "");
-    price = Number(price);
-    quantity = Number(quantity);
-    price = price * quantity;
+
+    let existingProd = localStoragedata.find((curProd) => curProd.id == id)
+
+    if (existingProd && quantity >= 1) {
+        quantity = Number(existingProd.quantity) + Number(quantity)
+        price = Number(price * quantity);
+
+        let updateCart = { id, quantity, price };
+
+
+        updatedData = localStoragedata.map((curProd) => {
+            return curProd.id === id ? updateCart : curProd
+        })
+        console.log(updatedData);
+
+        localStorage.setItem("addtocartsData", JSON.stringify(updatedData));
+
+    }
+
+
+    if (existingProd) {
+        return false
+    }
+
+    quantity = Number(quantity).toFixed(2);
+    price = Number(price * quantity);
 
     localStoragedata.push({ id, price, quantity });
 
     localStorage.setItem("addtocartsData", JSON.stringify(localStoragedata));
 
-    updatecartValue(localStoragedata);
 
 
 }

@@ -330,10 +330,16 @@ p {
 
 /* FOOTER */
 
+.footer-section {
+    background-color: #2a2c30;
+
+}
+
 .footer {
     background-color: #2a2c30;
     color: white;
     display: flex;
+    justify-content: space-evenly;
     gap: 50px;
 
     & .footer-logo {
@@ -343,5 +349,85 @@ p {
         }
     }
 
+
+}
+
+
+
+
+/* CART-PAGE */
+
+.cart-card {
+    border-radius: 20px;
+    border: 1px solid gray;
+    display: flex;
+    padding: 1rem;
+    justify-content: space-evenly;
+    align-items: center;
+
+    & .title {
+        background-color: rgb(253, 212, 219);
+        padding: 0.1rem 0.5rem;
+        font-size: 10px;
+        border-radius: 50px;
+    }
+
+    & .name {
+        font-size: 1rem;
+    }
+
+    & .cart-img img {
+        width: 100px;
+    }
+
+    & .pieces {
+        display: flex;
+        margin: 1rem 0;
+
+        & p {
+            padding: 0.4rem 1rem;
+            border: 1px solid rgb(230, 230, 230);
+        }
+
+        & p:nth-child(1) {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+
+        }
+
+        & p:nth-child(3) {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+
+        }
+    }
+
+
+}
+
+.total {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+
+    & .total-summary {
+        padding: 1rem;
+        margin: 0 4rem 4rem 0;
+        border: 3px solid black;
+        width: 200px;
+
+        & .sub-total, .tax , .final-total{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            margin-bottom: 0.3rem;
+            
+
+            & p:last-child{
+                font-weight: 600;
+            }
+        }
+        
+    }
 
 }
