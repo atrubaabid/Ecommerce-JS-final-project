@@ -166,6 +166,17 @@ let showtotalprice = () => {
 showtotalprice()
 
 
+// TOAST
+let showToast = (operation, id) => {
+
+    let div = document.createElement("div");
+    div.classList.add("toast")
+    div.innerHTML = `Product with ID ${id} has been ${operation}`
+
+    document.body.append(div);
+}
+
+
 
 
 
@@ -272,6 +283,9 @@ let showCartProducts = () => {
 
             // update cart value
             updatecartValue(LSdata);
+
+            // toast
+            showToast("removed", id)
 
 
 

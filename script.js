@@ -172,6 +172,16 @@ let getLSData = () => {
 
 getLSData()
 
+// TOAST
+let showToast = (operation, id) => {
+
+    let div = document.createElement("div");
+    div.classList.add("toast")
+    div.innerHTML = `Product with ID ${id} has been ${operation}`
+
+    document.body.append(div);
+}
+
 
 
 
@@ -204,6 +214,9 @@ let addToCart = (event, id) => {
 
         localStorage.setItem("addtocartsData", JSON.stringify(localStoragedata));
 
+        // toast
+        showToast("Added", id)
+
 
 
     }
@@ -222,7 +235,8 @@ let addToCart = (event, id) => {
 
     updatecartValue(localStoragedata)
 
-
+    // Toast
+    showToast("Added", id)
 
 
 }

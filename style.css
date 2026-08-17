@@ -39,7 +39,7 @@ p {
 }
 
 /* HEADER */
-.header{
+.header {
     position: fixed;
     z-index: 1000;
     background-color: white;
@@ -190,7 +190,6 @@ p {
 
     & .hero-img {
         height: 300px;
-        /* background-color: aquamarine; */
         background-image: url(images/heroSection.svg);
         background-size: 100% 100%;
     }
@@ -202,6 +201,8 @@ p {
 /* NEW-YEAR-CARD */
 
 .new-year-sale {
+    padding-top: 6rem;
+
     & div h1 {
         text-align: center;
     }
@@ -367,6 +368,9 @@ p {
 /* CART-PAGE */
 
 
+.carts-section {
+    padding-top: 6rem;
+}
 
 .cart-card {
     border-radius: 20px;
@@ -444,5 +448,76 @@ p {
         }
 
     }
+
+}
+
+
+
+/* TOAST */
+
+.toast {
+    width: 20rem;
+    background-color: #2a2c30;
+    color: white;
+    padding: 1rem;
+    position: fixed;
+    border-radius: 10px;
+    top: 10rem;
+    right: -35rem;
+    text-align: center;
+    animation: toast 4s linear;
+
+}
+
+@keyframes toast {
+    0% {
+        right: -35rem;
+    }
+
+    20% {
+        right: 2rem;
+
+    }
+
+    90% {
+        right: 2rem;
+
+    }
+
+    100% {
+        right: -35rem;
+
+
+
+    }
+}
+
+
+@media (width <=810px) {
+
+    .hero-section {
+        height: 100vh;
+    }
+
+    .hero-content {
+        top: 10rem;
+        grid-template-columns: 1fr;
+    }
+
+    .hero-text {
+        text-align: center;
+        padding-right: 3.5rem;
+    }
+
+    .hero-img {
+        margin-right: 3.5rem;
+    }
+
+    .footer {
+        text-align: center;
+        justify-content: center;
+
+    }
+
 
 }
