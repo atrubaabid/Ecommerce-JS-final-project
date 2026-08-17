@@ -59,18 +59,19 @@
 
     <!-- CARTS SECTION START -->
     <section class="carts-section">
-        <div class="container2 ">
+        <div class="container2 cart-products-show ">
+
 
 
         </div>
 
-        <template>
-            <div class="cart-card">
+        <template class="cart-product">
+            <div class="cart-card" id="cardValue">
 
-                <p class="title">computer</p>
-                <div class="cart-img"><img src="./images/headphone.png" alt=""></div>
-                <h3 class="name">laptop</h3>
-                <p class="price">999</p>
+                <p class="title"></p>
+                <div class="cart-img"><img class="cartProd-img" src="" alt=""></div>
+                <h3 class="name"></h3>
+                <p class="price"></p>
 
                 <div class="pieces">
                     <p class="increment">+</p>
@@ -78,7 +79,7 @@
                     <p class="decrement">-</p>
                 </div>
 
-                <button class="btn1">Remove</button>
+                <button class="btn1 remove-cart-prods">Remove</button>
 
 
             </div>
@@ -90,23 +91,26 @@
                 <p>Selected Offer Summary</p>
                 <div class="sub-total">
                     <p>Sub Total:</p>
-                    <p>₹2648</p>
+                    <p class="sub-total-price"></p>
                 </div>
 
                 <div class="tax">
                     <p>Tax:</p>
-                    <p>₹50</p>
+                    <p>Rs 50</p>
                 </div>
 
                 <hr>
 
                 <div class="final-total">
                     <p>Final Total:</p>
-                    <p>₹2698</p>
+                    <p class="final-total-price"></p>
                 </div>
 
             </div>
         </div>
+
+
+
     </section>
     <!-- CARTS SECTION END -->
 
@@ -154,7 +158,7 @@
     <!-- FOOTER-END -->
 
 
-    <script src="script.js"></script>
+    <script src="cart.js"></script>
 </body>
 
 </html>

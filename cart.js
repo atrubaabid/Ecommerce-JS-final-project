@@ -120,36 +120,7 @@ const products = [
     }
 ]
 
-
-let productContainer = document.querySelector(".products-cards");
-let productTemplate = document.querySelector(".productTemplate")
-
-
-// INCREMENT & DECREAMENT TOGGLE
-let ProductQuantityToggle = (event, id, stock) => {
-    let selectedCard = document.querySelector(`#card${id}`);
-    let quantityP = selectedCard.querySelector(".product-piece");
-    let quantity = Number(quantityP.innerHTML);
-
-    if (event.target.className == "increment") {
-        if (quantity < stock) {
-            quantity += 1;
-        } else if (quantity == stock) {
-            quantity = stock;
-        }
-    } else if (event.target.className == "decrement") {
-        if (quantity > 1) {
-            quantity -= 1;
-        }
-    }
-    quantityP.innerHTML = quantity
-}
-
-
-
-
-// UPDATE CART VALUE
-
+// UPDATE-CART-VALUE
 let updatecartValue = (data) => {
     let CartValue = document.querySelector("#cart");
     return CartValue.innerHTML = data.length;
@@ -172,107 +143,153 @@ let getLSData = () => {
 
 getLSData()
 
+// SHOW-TOTAL-PRICE
+let showtotalprice = () => {
 
+    let lsData = getLSData()
 
+    let TotalPrice = lsData.reduce((acc, cur) => {
+        let productPrice = cur.price || 0;
+        return acc += productPrice;
+    }, 0)
 
+    TotalPrice = Number(TotalPrice.toFixed(2))
 
-
-// ADD TO CART
-
-let addToCart = (event, id) => {
-
-    let localStoragedata = getLSData();
-
-    let selectedCard = document.querySelector(`#card${id}`);
-    let price = selectedCard.querySelector(".original-price").innerHTML;
-    let quantity = selectedCard.querySelector(".product-piece").innerHTML;
-
-    price = price.replace("Rs ", "");
-
-    let existingProd = localStoragedata.find((curProd) => curProd.id == id)
-
-    if (existingProd && quantity >= 1) {
-        quantity = Number(existingProd.quantity) + Number(quantity)
-        price = Number(price * quantity);
-
-        let updateCart = { id, price, quantity };
-
-
-        localStoragedata = localStoragedata.map((curProd) => {
-            return curProd.id === id ? updateCart : curProd
-        })
-
-        localStorage.setItem("addtocartsData", JSON.stringify(localStoragedata));
-
-
-
-    }
-
-
-    if (existingProd) {
-        return false
-    }
-
-    quantity = Number(quantity);
-    price = Number(price * quantity);
-
-    localStoragedata.push({ id, price, quantity });
-
-    localStorage.setItem("addtocartsData", JSON.stringify(localStoragedata));
-
-    updatecartValue(localStoragedata)
+    document.querySelector(".sub-total-price").innerHTML = `Rs ${TotalPrice}`;
+    document.querySelector(".final-total-price").innerHTML = `Rs ${TotalPrice + 50}`;
 
 
 
 
 }
 
+showtotalprice()
 
 
 
 
-// SHOW PRODUCTS
-let showProductContainer = (products) => {
-
-    if (!products) {
-        return false;
-    }
 
 
-    products.forEach((curProd) => {
 
-        let { id, name, category, brand, price, stock, image, description } = curProd;
+
+
+
+// SHOW-CART-PRODUCTS
+
+let showCartProducts = () => {
+
+    let LSdata = getLSData();
+
+    let cartproductsShowCon = document.querySelector(".cart-products-show")
+    let productTemplate = document.querySelector(".cart-product");
+
+    // LS-CARD-DATA-SHOW
+    LSdata.forEach((curProd) => {
 
         let productClone = document.importNode(productTemplate.content, true);
-
+        let { id, quantity, price } = curProd;
 
         productClone.querySelector("#cardValue").setAttribute("id", `card${id}`)
-        productClone.querySelector(".category").textContent = category;
-        productClone.querySelector(".p-name").textContent = name;
-        productClone.querySelector(".product-img").src = image;
-        productClone.querySelector(".product-img").alt = name;
-        productClone.querySelector(".description").textContent = description;
-        productClone.querySelector(".original-price").textContent = `Rs ${price}`;
-        productClone.querySelector(".productfake-price").textContent = `Rs ${price * 4}`;
-        productClone.querySelector(".p-stock").textContent = stock;
+        productClone.querySelector(".price").textContent = price
+        productClone.querySelector(".product-piece").textContent = quantity;
 
-        productClone.querySelector(".Quantity").addEventListener("click", (event) => {
-            ProductQuantityToggle(event, id, stock)
+        let copyCard = products.filter((allprods) => {
+            return allprods.id === id
         })
 
-        productClone.querySelector(".AddtoCart").addEventListener("click", (event) => {
-            addToCart(event, id)
+        // ORIGINAL-CARD-DATA-SHOW
+        copyCard.forEach((orignalProds) => {
+
+            let { name, category, image, stock, price } = orignalProds;
+
+            let originalPrice = price
+
+            productClone.querySelector(".name").textContent = name;
+            productClone.querySelector(".title").textContent = category;
+            productClone.querySelector(".cartProd-img").src = image;
+
+            // UPDATE CART INCREMENT-DECREMENT PRICE & QUANTITY
+            productClone.querySelector(".pieces").addEventListener("click", (event) => {
+
+                let selectedCard = document.querySelector(`#card${id}`);
+                let priceCard = selectedCard.querySelector(".price");
+                let QuantityCard = selectedCard.querySelector(".product-piece");
+                let quantity = Number(QuantityCard.innerHTML);
+
+                if (event.target.className == "increment") {
+                    if (quantity < stock) {
+                        quantity += 1
+                    } else if (quantity == stock) {
+                        quantity = stock
+                    }
+
+                } else if (event.target.className == "decrement") {
+                    if (quantity > 1) {
+                        quantity -= 1
+                    }
+                }
+
+
+                let totalPrice = Number(originalPrice) * Number(quantity);
+                price = Number(totalPrice.toFixed(2));
+
+
+
+                let updateCart = { id, price, quantity };
+
+
+                LSdata = LSdata.map((curProd) => {
+                    return curProd.id === id ? updateCart : curProd;
+                })
+
+                localStorage.setItem("addtocartsData", JSON.stringify(LSdata));
+
+                priceCard.innerHTML = price
+                QuantityCard.innerHTML = quantity;
+
+
+                showtotalprice()
+
+            })
+
+
         })
 
+        // REMOVE-EVENT
+        productClone.querySelector(".remove-cart-prods").addEventListener("click", (event) => {
+
+            // after delete the item update LS data
+            LSdata = LSdata.filter((curProd) => {
+                return curProd.id !== id;
+            })
+
+            localStorage.setItem("addtocartsData", JSON.stringify(LSdata));
+
+
+            // remove selected div from dom
+            let removeDiv = document.querySelector(`#card${id}`);
+            removeDiv.remove();
+
+            // update cart value
+            updatecartValue(LSdata);
 
 
 
 
-        productContainer.append(productClone);
+
+
+        })
+
+        cartproductsShowCon.append(productClone)
+
 
     })
+
+
+
+
+
 }
 
-showProductContainer(products)
 
-
+showCartProducts()
